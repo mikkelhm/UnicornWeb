@@ -131,7 +131,6 @@
     <Content Include="index.htm" />
     <Content Include="packages.config" />
     <None Include="Properties\PublishProfiles\unicorn - Web Deploy.pubxml" />
-    <Content Include="secrets.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -172,7 +171,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>25025</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
