@@ -141,6 +141,8 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="assets\images\unicorn.png" />
+    <Content Include="index.htm" />
     <Content Include="packages.config" />
     <None Include="Properties\PublishProfiles\unicorn - Web Deploy.pubxml" />
     <Content Include="secrets.config" />
