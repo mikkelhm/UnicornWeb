@@ -1,10 +1,9 @@
 ﻿using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
+using Autofac.Integration.Mvc;
 using Autofac.Integration.WebApi;
 using Unicorn.Web.Bootstrapping;
-using Microsoft.AspNet.WebHooks;
-using Microsoft.AspNet.WebHooks.Diagnostics;
 
 namespace Unicorn.Web.UI
 {
@@ -14,7 +13,7 @@ namespace Unicorn.Web.UI
         {
             var boot = new BootManager();
             var container = boot.Container;
-            var resolver = new Autofac.Integration.Mvc.AutofacDependencyResolver(container);
+            var resolver = new AutofacDependencyResolver(container);
             DependencyResolver.SetResolver(resolver);
 
             // Create the WebApi depenedency resolver

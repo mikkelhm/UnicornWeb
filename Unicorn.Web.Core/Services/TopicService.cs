@@ -29,15 +29,15 @@ namespace Unicorn.Web.Core.Services
         {
             var namespaceManager = NamespaceManager.CreateFromConnectionString(_globalSettings.ServiceBusConnectionString);
 
-            if (!namespaceManager.TopicExists(_globalSettings.DiscoTopicName))
+            if (await namespaceManager.TopicExistsAsync(_globalSettings.DiscoTopicName) == false)
             {
                 await namespaceManager.CreateTopicAsync(_globalSettings.DiscoTopicName);
             }
-            if (!namespaceManager.SubscriptionExists(_globalSettings.DiscoTopicName, "Gadgets"))
+            if (await namespaceManager.SubscriptionExistsAsync(_globalSettings.DiscoTopicName, "Gadgets") == false)
             {
-                await namespaceManager.CreateSubscriptionAsync(_globalSettings.DiscoTopicName, "Gedgets");
+                await namespaceManager.CreateSubscriptionAsync(_globalSettings.DiscoTopicName, "Gadgets");
             }
-            if (!namespaceManager.SubscriptionExists(_globalSettings.DiscoTopicName, "Notifications"))
+            if (await namespaceManager.SubscriptionExistsAsync(_globalSettings.DiscoTopicName, "Notifications") == false)
             {
                 await namespaceManager.CreateSubscriptionAsync(_globalSettings.DiscoTopicName, "Notifications");
             }
