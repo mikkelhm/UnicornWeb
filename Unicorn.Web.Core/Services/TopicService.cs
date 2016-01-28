@@ -14,13 +14,15 @@ namespace Unicorn.Web.Core.Services
         public TopicService(IGlobalSettings globalSettings)
         {
             _globalSettings = globalSettings;
-            EnsureTopic().GetAwaiter().GetResult();
+            Task.Run(() => this.EnsureTopic()).Wait();
+
         }
 
         public async Task AddMessageToTopic(TopicMessageModel message)
         {
             TopicClient client = TopicClient.CreateFromConnectionString(_globalSettings.ServiceBusConnectionString,
                 _globalSettings.DiscoTopicName);
+            //
             var brokeredMessage = new BrokeredMessage(message);
             await client.SendAsync(brokeredMessage);
         }
