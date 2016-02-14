@@ -46,7 +46,7 @@ namespace Unicorn.Web.WebHooks
                         {
                             _topicService.AddMessageToTopic(new TopicMessageModel()
                             {
-                                Message = "disco",
+                                Message = entry.Get("text"),
                                 Sender = entry.Get("user_name")
                             });
                         }

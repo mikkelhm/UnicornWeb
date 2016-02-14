@@ -15,7 +15,6 @@ namespace Unicorn.Web.Core.Services
         {
             _globalSettings = globalSettings;
             Task.Run(() => this.EnsureTopic()).Wait();
-
         }
 
         public async Task AddMessageToTopic(TopicMessageModel message)
