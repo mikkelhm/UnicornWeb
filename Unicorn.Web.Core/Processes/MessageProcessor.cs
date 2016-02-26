@@ -77,7 +77,7 @@ namespace Unicorn.Web.Core.Processes
                     {
                         // do stuff to message
 
-                        //await message.CompleteAsync();
+                        await message.CompleteAsync();
                     }
                     else
                     {
