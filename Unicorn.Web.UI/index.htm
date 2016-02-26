@@ -6,9 +6,20 @@
     <style>
         body {
             background: #acd2dc url(/assets/images/unicorn.png) no-repeat fixed 50% 50%;
+            font-family: 'Alegreya Sans', sans-serif;
         }
     </style>
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css"/>
+    <style>
+        .toast-info { background-color: #fff;}
+        #toast-container>div { 
+            color: #f36798;
+            font-weight: bold;
+            border: 7px solid #f36798;
+            padding: 15px;
+        }
+    </style>
+    <link href='https://fonts.googleapis.com/css?family=Alegreya+Sans' rel='stylesheet' type='text/css'>
 
 </head>
 <body>
@@ -21,6 +32,8 @@
     var connection = $.hubConnection();
     var contosoChatHubProxy = connection.createHubProxy('messageHub');
     contosoChatHubProxy.on('addMessage', function (userName, message) {
+        toastr.options.timeOut = (60000) * 10;
+        toastr.options.progressBar = true;
         toastr.info(userName + ' ' + message);
     });
     connection.start()
