@@ -32,16 +32,14 @@
     var connection = $.hubConnection();
     var messageHub = connection.createHubProxy('messageHub');
     messageHub.on('addMessage', function (userName, message, disco) {
-        
         if (disco) {
             toastr.options.timeOut = (60000) * 60;
             toastr.options.progressBar = true;
-            toastr.options.positionClass = "toast-top-right";
         } else {
             toastr.options.timeOut = (60000) * 10;
-            toastr.options.positionClass = "toast-top-left";
         }
-        toastr.info(userName + ' ' + message);
+        toastr.options.positionClass = "toast-top-center";
+        toastr["info"](userName + ': ' + message);
     });
     connection.start()
         .done(function(){ console.log('Now connected, connection ID=' + connection.id); })
