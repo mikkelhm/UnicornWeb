@@ -11,5 +11,6 @@ namespace Unicorn.Web.Contracts.Models
         public DateTime RecievedDate { get; set; }
         public string Sender { get; set; }
         public string Message { get; set; }
+        public bool Disco { get; set; }
     }
 }

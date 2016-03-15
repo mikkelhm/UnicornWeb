@@ -42,14 +42,12 @@ namespace Unicorn.Web.WebHooks
                     if (string.IsNullOrEmpty(text) == false)
                     {
                         text = text.Trim().ToLowerInvariant();
-                        if (_globalSettings.DiscoTriggers.Any(discoTrigger => text.Contains(discoTrigger)))
+                        _topicService.AddMessageToTopic(new TopicMessageModel()
                         {
-                            _topicService.AddMessageToTopic(new TopicMessageModel()
-                            {
-                                Message = entry.Get("text"),
-                                Sender = entry.Get("user_name")
-                            });
-                        }
+                            Message = entry.Get("text"),
+                            Sender = entry.Get("user_name"),
+                            Disco = _globalSettings.DiscoTriggers.Any(discoTrigger => text.Contains(discoTrigger))
+                        });
                     }
                     break;
             }

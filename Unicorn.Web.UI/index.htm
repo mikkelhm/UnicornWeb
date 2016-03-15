@@ -31,9 +31,11 @@
 <script>
     var connection = $.hubConnection();
     var contosoChatHubProxy = connection.createHubProxy('messageHub');
-    contosoChatHubProxy.on('addMessage', function (userName, message) {
-        toastr.options.timeOut = (60000) * 10;
-        toastr.options.progressBar = true;
+    contosoChatHubProxy.on('addMessage', function (userName, message, disco) {
+        if (disco) {
+            toastr.options.timeOut = (60000) * 10;
+            toastr.options.progressBar = true;
+        }
         toastr.info(userName + ' ' + message);
     });
     connection.start()

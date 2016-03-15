@@ -68,7 +68,7 @@ namespace Unicorn.Web.Core.Processes
                     // Do actual processing of the message
                     var topicMessage = message.GetBody<TopicMessageModel>();
                     var context = GlobalHost.ConnectionManager.GetHubContext<MessageHub>();
-                    context.Clients.All.addMessage(topicMessage.Sender, topicMessage.Message);
+                    context.Clients.All.addMessage(topicMessage.Sender, topicMessage.Message, topicMessage.Disco);
                     //LogHelper.Info<DeploymentProcessor>(
                     //    string.Format("Starting to deploy from {0} to {1} (Correlation Id {2})",
                     //        deploymentMessage.RepositoryUrl, deploymentMessage.RemoteRepositoryUrl, message.CorrelationId));
