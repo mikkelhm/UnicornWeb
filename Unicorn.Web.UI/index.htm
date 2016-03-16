@@ -29,7 +29,7 @@
     
 
 <script>
-    var connection = $.hubConnection();
+    var connection = $.hubConnection("https://unicorn.azurewebsites.net");
     var messageHub = connection.createHubProxy('messageHub');
     messageHub.on('addMessage', function (userName, message, disco) {
         if (disco) {
