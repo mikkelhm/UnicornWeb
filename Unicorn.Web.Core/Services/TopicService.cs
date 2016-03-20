@@ -21,9 +21,9 @@ namespace Unicorn.Web.Core.Services
         {
             TopicClient client = TopicClient.CreateFromConnectionString(_globalSettings.ServiceBusConnectionString,
                 _globalSettings.DiscoTopicName);
-            //
             var brokeredMessage = new BrokeredMessage(message);
-            brokeredMessage.Properties["Disco"] = message.Disco;
+            if (message.Disco)
+                brokeredMessage.Properties["Disco"] = true;
             await client.SendAsync(brokeredMessage);
         }
 
