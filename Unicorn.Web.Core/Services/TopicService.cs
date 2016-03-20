@@ -23,6 +23,7 @@ namespace Unicorn.Web.Core.Services
                 _globalSettings.DiscoTopicName);
             //
             var brokeredMessage = new BrokeredMessage(message);
+            brokeredMessage.Properties["Disco"] = message.Disco;
             await client.SendAsync(brokeredMessage);
         }
 
@@ -36,7 +37,8 @@ namespace Unicorn.Web.Core.Services
             }
             if (await namespaceManager.SubscriptionExistsAsync(_globalSettings.DiscoTopicName, "Gadgets") == false)
             {
-                await namespaceManager.CreateSubscriptionAsync(_globalSettings.DiscoTopicName, "Gadgets");
+                var discoFilter = new SqlFilter("Disco = true");
+                await namespaceManager.CreateSubscriptionAsync(_globalSettings.DiscoTopicName, "Gadgets", discoFilter);
             }
             if (await namespaceManager.SubscriptionExistsAsync(_globalSettings.DiscoTopicName, "Notifications") == false)
             {

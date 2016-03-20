@@ -83,7 +83,8 @@
     <Compile Include="GlobalSettings.cs" />
     <Compile Include="Messaging\Hubs\MessageHub.cs" />
     <Compile Include="Messaging\ServciceBus\MessageWrapper.cs" />
-    <Compile Include="Processes\MessageProcessor.cs" />
+    <Compile Include="Processes\DiscoProcessor.cs" />
+    <Compile Include="Processes\NotificationProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\TopicService.cs" />
   </ItemGroup>

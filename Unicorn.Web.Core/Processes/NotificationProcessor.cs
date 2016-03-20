@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR;
@@ -11,14 +12,14 @@ using Unicorn.Web.Core.Messaging.Hubs;
 
 namespace Unicorn.Web.Core.Processes
 {
-    public class MessageProcessor : BaseProcessor
+    public class NotificationProcessor : BaseProcessor
     {
         private readonly IGlobalSettings _globalSettings;
         private readonly IMessageWrapper _messageWrapper;
         private MessageReceiver _receiver;
         private readonly CancellationTokenSource _cancellationTokenSource;
 
-        public MessageProcessor(IGlobalSettings globalSettings, IMessageWrapper messageWrapper)
+        public NotificationProcessor(IGlobalSettings globalSettings, IMessageWrapper messageWrapper)
         {
             _globalSettings = globalSettings;
             _messageWrapper = messageWrapper;
@@ -56,50 +57,35 @@ namespace Unicorn.Web.Core.Processes
         {
             if (message == null)
             {
-                //LogHelper.Info<DeploymentProcessor>("ProcessMessageAsync was called with a null BrokeredMessage");
+                Trace.TraceWarning("ProcessMessageAsync was called with a null BrokeredMessage");
                 return;
             }
 
             if (cancellationToken.IsCancellationRequested == false)
             {
-                //LogHelper.Info<DeploymentProcessor>(string.Format("Receiving BrokeredMessage with Correlation Id {0}", message.CorrelationId));
+                Trace.TraceInformation("Receiving BrokeredMessage with Correlation Id {0}", message.CorrelationId);
                 try
                 {
                     // Do actual processing of the message
                     var topicMessage = message.GetBody<TopicMessageModel>();
                     var context = GlobalHost.ConnectionManager.GetHubContext<MessageHub>();
                     context.Clients.All.addMessage(topicMessage.Sender, topicMessage.Message, topicMessage.Disco);
-                    //LogHelper.Info<DeploymentProcessor>(
-                    //    string.Format("Starting to deploy from {0} to {1} (Correlation Id {2})",
-                    //        deploymentMessage.RepositoryUrl, deploymentMessage.RemoteRepositoryUrl, message.CorrelationId));
+                    Trace.TraceInformation("Processing message for {0}, sent by {1}, disco? {2}", topicMessage.Message, topicMessage.Sender, topicMessage.Disco);
 
-                    if (true) // validation
-                    {
-                        // do stuff to message
-
-                        await message.CompleteAsync();
-                    }
-                    else
-                    {
-                        // dead letter the message
-                        //await message.DeadLetterAsync("Deployment failed validation", validateResult.ErrorMessage);
-
-                    }
+                    // Complete the message
+                    await message.CompleteAsync();
                 }
                 catch (MessageLockLostException e)
                 {
-                    //LogHelper.Error<DeploymentProcessor>(
-                    //    "Completing a BrokeredMessage in ProcessMessageAsync throw a MessageLockLostException", e);
+                    Trace.TraceError("Completing a BrokeredMessage in ProcessMessageAsync throw a MessageLockLostException");
                 }
                 catch (MessagingException e)
                 {
-                    //LogHelper.Error<DeploymentProcessor>(
-                    //    "Completing a BrokeredMessage in ProcessMessageAsync throw a MessagingException", e);
+                    Trace.TraceError("Completing a BrokeredMessage in ProcessMessageAsync throw a MessagingException");
                 }
                 catch (Exception e)
                 {
-                    //LogHelper.Error<DeploymentProcessor>(
-                    //    "An exception occured while trying to process a deployment request message", e);
+                    Trace.TraceError("An exception occured while trying to process a deployment request message");
                 }
 
                 message.Dispose();
@@ -108,15 +94,12 @@ namespace Unicorn.Web.Core.Processes
 
         private void OnExceptionReceived(object sender, ExceptionReceivedEventArgs e)
         {
-            //LogHelper.Error<DeploymentProcessor>(
-            //    string.Format(
-            //        "An exception occured while trying to receive a message from the '{0}' Service Bus Queue",
-            //        _queueName), e.Exception);
+            Trace.TraceError("An exception occured while trying to receive a message from the '{0}' Service Bus Topic", _globalSettings.DiscoTopicName);
         }
 
         public override void DisposeTheRest()
         {
-            //LogHelper.Info<DeploymentProcessor>("Disposing the Deployment processor");
+            Trace.TraceInformation("Disposing the Message processor");
 
             _cancellationTokenSource.Cancel();
 

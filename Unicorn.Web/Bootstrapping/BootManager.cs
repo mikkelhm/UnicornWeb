@@ -80,7 +80,8 @@ namespace Unicorn.Web.Bootstrapping
             builder.RegisterType<MessageWrapper>().As<IMessageWrapper>().SingleInstance();
 
             // Processors
-            builder.RegisterType<MessageProcessor>().As<IProcessor>().SingleInstance();
+            builder.RegisterType<NotificationProcessor>().As<IProcessor>().SingleInstance();
+            builder.RegisterType<DiscoProcessor>().As<IProcessor>().SingleInstance();
 
 
             _container = builder.Build();
