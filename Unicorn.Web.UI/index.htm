@@ -96,11 +96,37 @@
             animation-duration: 10s;
             animation-fill-mode: forwards;
         }
+
         .stack-right {
             animation-name: stack-right;
             animation-iteration-count: 1;
             animation-duration: 10s;
             animation-fill-mode: forwards;
+        }
+
+        .disco {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 50px;
+            border-top: 1px solid black;
+            animation-name: disco;
+            animation-duration: 1s;
+        }
+
+        @keyframe disco {
+            0% {
+                background-color: #f36798;
+            }
+            25% {
+                background-color: #fff;
+            }
+            50% {
+                background-color: #ffff00;
+            }
+            75% {
+                background-color: #0000ff;
+            }
         }
 
         @keyframes blink {
@@ -140,6 +166,7 @@
                 transform: rotate(0);
             }
         }
+
         @keyframes stack-right {
             0% {
                 left: 50%;
@@ -171,35 +198,38 @@
 
 </head>
 <body>
-<!--<div id="message" class="message"></div>-->
-<script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.0.min.js"></script>
-<script src="//ajax.aspnetcdn.com/ajax/signalr/jquery.signalr-2.2.0.min.js"></script>
+    <script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.0.min.js"></script>
+    <script src="//ajax.aspnetcdn.com/ajax/signalr/jquery.signalr-2.2.0.min.js"></script>
 
+    <script>
+        var connection = $.hubConnection("https://unicorn.azurewebsites.net");
+        var messageHub = connection.createHubProxy('messageHub');
+        messageHub.on('addMessage', function (userName, message, disco) {
+            var messageDiv = $("<div></div>");
+            messageDiv.addClass("message");
+            messageDiv.attr("data-dir", (disco ? "right" : "left"));
+            messageDiv.attr("data-show", (disco ? (60000 * 60) : 60000));
+            messageDiv.text(userName + ": " + message);
+            messageDiv.bind("animationend webkitAnimationEnd oAnimationEnd MSAnimationEnd", function () {
+                $(this).removeClass("blink");
+                messageDiv.bind("animationend webkitAnimationEnd oAnimationEnd MSAnimationEnd", function () {
+                    $(this).removeClass("stack-right").addClass("message-static").addClass($(this).attr("data-dir"));
+                    $(this).delay($(this).attr("data-show")).queue(function () { $(this).remove(); });
+                }).addClass("stack-" + $(this).attr("data-dir"));
+            }).addClass("blink");
 
-<script>
-    var connection = $.hubConnection("https://unicorn.azurewebsites.net");
-    var messageHub = connection.createHubProxy('messageHub');
-    messageHub.on('addMessage', function(userName, message, disco) {
-        var messageDiv = $("<div></div>");
-        messageDiv.addClass("message");
-        messageDiv.attr("data-dir", (disco ? "right" : "left"));
-        messageDiv.attr("data-show", (disco ? (60000*60) : 60000));
-        messageDiv.text(userName + ": " + message);
-        messageDiv.bind("animationend webkitAnimationEnd oAnimationEnd MSAnimationEnd", function() {
-            $(this).removeClass("blink");
-            messageDiv.bind("animationend webkitAnimationEnd oAnimationEnd MSAnimationEnd", function() {
-                $(this).removeClass("stack-right").addClass("message-static").addClass($(this).attr("data-dir"));
-                $(this).delay($(this).attr("data-show")).queue(function() { $(this).remove(); });
-            }).addClass("stack-" + $(this).attr("data-dir"));
-        }).addClass("blink");
+            $("body").append(messageDiv);
+        });
 
-        $("body").append(messageDiv);
+        messageHub.on("addDisco", function () {
+            var discoDiv = $("<div></div>");
+            discoDiv.addClass("disco");
+            $("body").append(discoDiv);
+        });
 
-
-    });
-    connection.start()
-        .done(function() { console.log('Now connected, connection ID=' + connection.id); })
-        .fail(function() { console.log('Could not connect'); });
-</script>
+        connection.start()
+            .done(function () { console.log('Now connected, connection ID=' + connection.id); })
+            .fail(function () { console.log('Could not connect'); });
+    </script>
 </body>
 </html>

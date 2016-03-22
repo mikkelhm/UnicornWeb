@@ -68,9 +68,13 @@ namespace Unicorn.Web.Core.Processes
                 {
                     // Do actual processing of the message
                     var topicMessage = message.GetBody<TopicMessageModel>();
-                    var context = GlobalHost.ConnectionManager.GetHubContext<MessageHub>();
-                    context.Clients.All.addMessage("DISCO", topicMessage.Message, topicMessage.Disco);
                     Trace.TraceInformation("Processing message for {0}, sent by {1}, disco? {2}", topicMessage.Message, topicMessage.Sender, topicMessage.Disco);
+                    // start disco
+                    var context = GlobalHost.ConnectionManager.GetHubContext<MessageHub>();
+                    context.Clients.All.addDisco();
+
+                    // after 10 mins, stop it
+                    
 
                     // Complete the message
                     await message.CompleteAsync();
