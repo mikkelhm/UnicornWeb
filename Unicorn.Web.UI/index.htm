@@ -112,9 +112,10 @@
             border-top: 1px solid black;
             animation-name: disco;
             animation-duration: 1s;
+            animation-iteration-count: infinite;
         }
 
-        @keyframe disco {
+        @keyframes disco {
             0% {
                 background-color: #f36798;
             }
@@ -221,9 +222,10 @@
             $("body").append(messageDiv);
         });
 
-        messageHub.on("addDisco", function () {
+        messageHub.on("addDisco", function (message) {
             var discoDiv = $("<div></div>");
             discoDiv.addClass("disco");
+            discoDiv.text(message);
             $("body").append(discoDiv);
         });
 

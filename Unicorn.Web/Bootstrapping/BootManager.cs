@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Web.Http;
 using System.Web.Mvc;
 using Autofac;
+using Autofac.Extras.Quartz;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.SignalR;
 using Autofac.Integration.WebApi;
@@ -17,6 +18,7 @@ using Unicorn.Web.Contracts.Messaging.ServiceBus;
 using Unicorn.Web.Contracts.Processes;
 using Unicorn.Web.Contracts.Services;
 using Unicorn.Web.Core;
+using Unicorn.Web.Core.Jobs;
 using Unicorn.Web.Core.Messaging.ServciceBus;
 using Unicorn.Web.Core.Processes;
 using Unicorn.Web.Core.Services;
@@ -82,6 +84,9 @@ namespace Unicorn.Web.Bootstrapping
             // Processors
             builder.RegisterType<NotificationProcessor>().As<IProcessor>().SingleInstance();
             builder.RegisterType<DiscoProcessor>().As<IProcessor>().SingleInstance();
+
+            builder.RegisterModule(new QuartzAutofacFactoryModule());
+            builder.RegisterModule(new QuartzAutofacJobsModule(typeof(StopDiscoJob).Assembly));
 
 
             _container = builder.Build();

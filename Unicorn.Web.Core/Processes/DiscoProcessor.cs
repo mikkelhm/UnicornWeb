@@ -71,10 +71,10 @@ namespace Unicorn.Web.Core.Processes
                     Trace.TraceInformation("Processing message for {0}, sent by {1}, disco? {2}", topicMessage.Message, topicMessage.Sender, topicMessage.Disco);
                     // start disco
                     var context = GlobalHost.ConnectionManager.GetHubContext<MessageHub>();
-                    context.Clients.All.addDisco();
+                    context.Clients.All.addDisco(topicMessage.Message);
 
                     // after 10 mins, stop it
-                    
+
 
                     // Complete the message
                     await message.CompleteAsync();
