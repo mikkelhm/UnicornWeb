@@ -10,6 +10,7 @@ using Microsoft.AspNet.WebHooks;
 using Unicorn.Web.Contracts;
 using Unicorn.Web.Contracts.Models;
 using Unicorn.Web.Contracts.Services;
+using Unicorn.Web.Core.Extensions;
 
 namespace Unicorn.Web.WebHooks
 {
@@ -44,7 +45,7 @@ namespace Unicorn.Web.WebHooks
                         text = text.Trim().ToLowerInvariant();
                         _topicService.AddMessageToTopic(new TopicMessageModel()
                         {
-                            Message = entry.Get("text"),
+                            Message = entry.Get("text").RemoveHtml(),
                             Sender = entry.Get("user_name"),
                             Disco = _globalSettings.DiscoTriggers.Any(discoTrigger => text.Contains(discoTrigger))
                         });

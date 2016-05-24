@@ -96,6 +96,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="GlobalSettings.cs" />
     <Compile Include="Jobs\StopDiscoJob.cs" />
     <Compile Include="Messaging\Hubs\MessageHub.cs" />
