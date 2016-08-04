@@ -31,7 +31,7 @@ namespace Unicorn.Web.Controllers
         [HttpPost]
         public async Task<HttpResponseMessage> Add(MessageModel model)
         {
-            await _topicService.AddMessageToTopic(new TopicMessageModel() { Message = model.Message, Sender = "api" });
+            await _topicService.AddMessageToTopic(new TopicMessageModel() { Message = model.Message, Disco = model.Disco, Sender = "api" });
             return Request.CreateResponse(HttpStatusCode.OK, new { model.Message });
         }
 
